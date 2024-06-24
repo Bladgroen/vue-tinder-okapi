@@ -21,6 +21,7 @@
     padding: 1.5rem;
     border-radius: 10px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ff3833;
 }
 
 </style>
