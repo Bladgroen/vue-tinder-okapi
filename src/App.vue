@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <Header></Header>
+    <Okapi></Okapi>
     <Tinder
       ref="tinder"
       key-name="id"
@@ -35,11 +37,13 @@
 
 <script>
 import Tinder from '@/components/vue-tinder/Tinder.vue'
+import Header from '@/components/header.vue'
+import Okapi from '@/components/okapiLogo.vue'
 import source from '@/bing'
 
 export default {
   name: 'App',
-  components: { Tinder },
+  components: { Tinder, Header, Okapi },
   data: () => ({
     queue: [],
     offset: 0,
@@ -106,7 +110,7 @@ body {
 
 body {
   margin: 0;
-  background-color: #20262e;
+  background: #ff914d 50%;
   overflow: hidden;
 }
 

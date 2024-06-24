@@ -268,6 +268,7 @@ export default {
 .vue-tinder {
   position: relative;
   -webkit-tap-highlight-color: transparent;
+  margin-top: 1rem;
 }
 
 /* style正在被数据绑定，只能使用important来覆盖 */
