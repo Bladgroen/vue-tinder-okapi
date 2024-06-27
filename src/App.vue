@@ -18,7 +18,6 @@
             'background-image': `url(${scope.data.url})`
           }"
         />
-        <div>DIT IS EENS TEST</div>
       </template>
       <img class="like-pointer" slot="like" src="~img/like-txt.png" />
       <img class="nope-pointer" slot="nope" src="~img/nope-txt.png" />
@@ -28,11 +27,12 @@
     </Tinder>
     <div class="btns">
       <img src="~img/rewind.png" @click="decide('rewind')" />
-      <img src="~img/nope.png" @click="decide('nope')" />
-      <img src="~img/super-like.png" @click="decide('super')" />
-      <img src="~img/like.png" @click="decide('like')" />
+      <img ref="nopeButton" src="~img/nope.png" @click="decide('nope')" />
+      <img ref="superLikeButton" src="~img/super-like.png" @click="decide('super')" />
+      <img ref="likeButton" src="~img/like.png" @click="decide('like')" />
       <img src="~img/help.png" @click="decide('help')" />
     </div>
+    <Itsamatch v-if="showComponentForId" /> <!-- Conditionally render Itsamatch -->
   </div>
 </template>
 
@@ -40,19 +40,30 @@
 import Tinder from '@/components/vue-tinder/Tinder.vue'
 import Header from '@/components/header.vue'
 import Okapi from '@/components/okapiLogo.vue'
+import Itsamatch from '@/components/itsamatch.vue'
 import source from '@/bing'
 
 export default {
   name: 'App',
-  components: { Tinder, Header, Okapi },
+  components: { Tinder, Header, Okapi, Itsamatch },
   data: () => ({
     queue: [],
     offset: 0,
     history: [],
-    showComponent: false,
+    showComponentForId: false,
+    trackedIds: new Set(['stella']),    
   }),
   created() {
-    this.mock()
+    this.mock();
+  },
+  mounted() {
+    this.clickLikeButton();
+    this.timer = setInterval(() => {
+      this.clickLikeButton();
+    }, 60000);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
   methods: {
     mock(count = 5, append = true) {
@@ -66,6 +77,7 @@ export default {
           this.offset++
         }
       }
+
       if (append) {
         this.queue = this.queue.concat(list)
       } else {
@@ -73,7 +85,16 @@ export default {
       }
     },
     onSubmit({ item }) {
+      if (this.trackedIds.has(item.id)) {
+        console.log('test');
+        this.showComponentForId = true;
+      } else {
+        this.showComponentForId = false;
+      }
       if (this.queue.length < 3) {
+        this.mock()
+      }
+      if (this.queue.length === 0) {
         this.mock()
       }
       this.history.push(item)
@@ -104,7 +125,16 @@ export default {
       } else {
         this.$refs.tinder.decide(choice)
       }
-    }
+    },
+    clickLikeButton() {
+      this.$refs.likeButton.click();
+    },
+    clickNopeButton() {
+      this.$refs.nopeButton.click();
+    },
+    clickSuperLikeButton() {
+      this.$refs.superLikeButton.click();
+    },
   }
 }
 </script>
