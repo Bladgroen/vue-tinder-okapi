@@ -72,7 +72,8 @@ export default {
         if (this.offset < source.length) {
           list.push({
             id: source[this.offset].id,
-            url: source[this.offset].url
+            url: source[this.offset].url,
+            button: source[this.offset].button,
           })
           this.offset++
         }
@@ -127,7 +128,9 @@ export default {
       }
     },
     clickLikeButton() {
-      this.$refs.likeButton.click();
+      const currentItem = this.queue[0];
+      console.log('Clicked like button for item:', currentItem.id);
+      //this.$refs.likeButton.click();
     },
     clickNopeButton() {
       this.$refs.nopeButton.click();
