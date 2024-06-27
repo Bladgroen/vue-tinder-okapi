@@ -15,9 +15,10 @@
         <div
           class="pic"
           :style="{
-            'background-image': `url(https://cn.bing.com//th?id=OHR.${scope.data.id}_UHD.jpg&pid=hp&w=720&h=1280&rs=1&c=4&r=0)`
+            'background-image': `url(${scope.data.url})`
           }"
         />
+        <div>DIT IS EENS TEST</div>
       </template>
       <img class="like-pointer" slot="like" src="~img/like-txt.png" />
       <img class="nope-pointer" slot="nope" src="~img/nope-txt.png" />
@@ -47,7 +48,8 @@ export default {
   data: () => ({
     queue: [],
     offset: 0,
-    history: []
+    history: [],
+    showComponent: false,
   }),
   created() {
     this.mock()
@@ -56,8 +58,13 @@ export default {
     mock(count = 5, append = true) {
       const list = []
       for (let i = 0; i < count; i++) {
-        list.push({ id: source[this.offset] })
-        this.offset++
+        if (this.offset < source.length) {
+          list.push({
+            id: source[this.offset].id,
+            url: source[this.offset].url
+          })
+          this.offset++
+        }
       }
       if (append) {
         this.queue = this.queue.concat(list)
