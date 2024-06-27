@@ -32,7 +32,9 @@
       <img ref="likeButton" src="~img/like.png" @click="decide('like')" />
       <img src="~img/help.png" @click="decide('help')" />
     </div>
-    <Itsamatch v-if="showComponentForId" /> <!-- Conditionally render Itsamatch -->
+    <transition name="fade">
+      <Itsamatch v-if="showComponentForId" /> <!-- Conditionally render Itsamatch with transition -->
+    </transition>
   </div>
 </template>
 
@@ -51,19 +53,20 @@ export default {
     offset: 0,
     history: [],
     showComponentForId: false,
-    trackedIds: new Set(['stella']),    
+    trackedIds: new Set(['stella']), 
+    timer: null,
+    pauseTimer: null,   
   }),
   created() {
     this.mock();
   },
   mounted() {
-    this.clickLikeButton();
-    this.timer = setInterval(() => {
-      this.clickLikeButton();
-    }, 60000);
+    this.startLikeButtonInterval();
+
   },
   beforeDestroy() {
     clearInterval(this.timer);
+    clearTimeout(this.pauseTimer);
   },
   methods: {
     mock(count = 5, append = true) {
@@ -87,8 +90,10 @@ export default {
     },
     onSubmit({ item }) {
       if (this.trackedIds.has(item.id)) {
-        console.log('test');
+        setTimeout(() => {
         this.showComponentForId = true;
+        this.pauseLikeButtonInterval();
+      }, 3000);
       } else {
         this.showComponentForId = false;
       }
@@ -129,15 +134,28 @@ export default {
     },
     clickLikeButton() {
       const currentItem = this.queue[0];
-      console.log('Clicked like button for item:', currentItem.id);
-      //this.$refs.likeButton.click();
+      if (currentItem.button === 'like') {
+        this.$refs.likeButton.click();
+      }
+      if (currentItem.button === 'nope') {
+        this.$refs.nopeButton.click();
+      }
+      if (currentItem.button === 'super') {
+        this.$refs.superLikeButton.click();
+      }
     },
-    clickNopeButton() {
-      this.$refs.nopeButton.click();
+    startLikeButtonInterval() {
+      this.timer = setInterval(() => {
+        this.clickLikeButton();
+      }, 60000);
     },
-    clickSuperLikeButton() {
-      this.$refs.superLikeButton.click();
-    },
+    pauseLikeButtonInterval() {
+      clearInterval(this.timer);
+      this.pauseTimer = setTimeout(() => {
+        this.showComponentForId = false;
+        this.startLikeButtonInterval();
+      }, 300000); // 30 minutes in milliseconds
+    }
   }
 }
 </script>
@@ -273,4 +291,11 @@ body {
     transform: rotateY(-8deg);
   }
 } */
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
+}
 </style>
