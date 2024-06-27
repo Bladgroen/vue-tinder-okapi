@@ -2,9 +2,9 @@
   <div class="modal-container">
     <div class="overlay"></div>
     <div class="match">
-      <img src="@/assets/stella.png" class="stella" />
+      <img :src="ImgUrl" class="stella" />
       <img src="@/assets/match.png" class="match-image" />
-      <h2>€ 1,50</h2>
+      <h2>€ {{prijs}}</h2>
     </div>
   </div>
 </template>
@@ -61,4 +61,18 @@ h2 {
 }
 </style>
 
-<script></script>
+<script>
+export default {
+    props: {
+        ImgUrl: {
+            type: String,
+            required: true
+        },
+        prijs: {
+            type: String,
+            required: true
+        }
+    }
+}
+
+</script>

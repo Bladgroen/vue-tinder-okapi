@@ -33,7 +33,7 @@
       <img src="~img/help.png" @click="decide('help')" />
     </div>
     <transition name="fade">
-      <Itsamatch v-if="showComponentForId" /> <!-- Conditionally render Itsamatch with transition -->
+      <Itsamatch v-if="showComponentForId" :ImgUrl="ImgUrl" :prijs="prijs" /> <!-- Conditionally render Itsamatch with transition -->
     </transition>
   </div>
 </template>
@@ -53,9 +53,11 @@ export default {
     offset: 0,
     history: [],
     showComponentForId: false,
-    trackedIds: new Set(['stella']), 
+    trackedIds: new Set(['cola', 'stella']), 
     timer: null,
-    pauseTimer: null,   
+    pauseTimer: null,  
+    ImgUrl: '', 
+    prijs: '',
   }),
   created() {
     this.mock();
@@ -77,6 +79,7 @@ export default {
             id: source[this.offset].id,
             url: source[this.offset].url,
             button: source[this.offset].button,
+            prijs: source[this.offset].prijs
           })
           this.offset++
         }
@@ -91,6 +94,8 @@ export default {
     onSubmit({ item }) {
       if (this.trackedIds.has(item.id)) {
         setTimeout(() => {
+        this.ImgUrl = item.url;
+        this.prijs = item.prijs;
         this.showComponentForId = true;
         this.pauseLikeButtonInterval();
       }, 3000);
