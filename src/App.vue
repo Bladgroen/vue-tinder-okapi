@@ -28,12 +28,17 @@
     <div class="btns">
       <img src="~img/rewind.png" @click="decide('rewind')" />
       <img ref="nopeButton" src="~img/nope.png" @click="decide('nope')" />
-      <img ref="superLikeButton" src="~img/super-like.png" @click="decide('super')" />
+      <img
+        ref="superLikeButton"
+        src="~img/super-like.png"
+        @click="decide('super')"
+      />
       <img ref="likeButton" src="~img/like.png" @click="decide('like')" />
       <img src="~img/help.png" @click="decide('help')" />
     </div>
     <transition name="fade">
-      <Itsamatch v-if="showComponentForId" :ImgUrl="ImgUrl" :prijs="prijs" /> <!-- Conditionally render Itsamatch with transition -->
+      <Itsamatch v-if="showComponentForId" :ImgUrl="ImgUrl" :prijs="prijs" />
+      <!-- Conditionally render Itsamatch with transition -->
     </transition>
   </div>
 </template>
@@ -53,22 +58,42 @@ export default {
     offset: 0,
     history: [],
     showComponentForId: false,
-    trackedIds: new Set(['cola', 'stella']), 
+    trackedIds: new Set([
+      'cola',
+      'stella',
+      'cornet',
+      'icet',
+      'omer',
+      'red',
+      'rouge',
+      'desperados',
+      'appel',
+      'gerolsteiner-plat',
+      'wit',
+      'orange',
+      'icegreen',
+      'duvel',
+      'rose',
+      'colazero',
+      'gerolsteiner-sprudel',
+      'kriek',
+      'lemon',
+      'stellazero'
+    ]),
     timer: null,
-    pauseTimer: null,  
-    ImgUrl: '', 
-    prijs: '',
+    pauseTimer: null,
+    ImgUrl: '',
+    prijs: ''
   }),
   created() {
-    this.mock();
+    this.mock()
   },
   mounted() {
-    this.startLikeButtonInterval();
-
+    this.startLikeButtonInterval()
   },
   beforeDestroy() {
-    clearInterval(this.timer);
-    clearTimeout(this.pauseTimer);
+    clearInterval(this.timer)
+    clearTimeout(this.pauseTimer)
   },
   methods: {
     mock(count = 5, append = true) {
@@ -94,13 +119,13 @@ export default {
     onSubmit({ item }) {
       if (this.trackedIds.has(item.id)) {
         setTimeout(() => {
-        this.ImgUrl = item.url;
-        this.prijs = item.prijs;
-        this.showComponentForId = true;
-        this.pauseLikeButtonInterval();
-      }, 3000);
+          this.ImgUrl = item.url
+          this.prijs = item.prijs
+          this.showComponentForId = true
+          this.pauseLikeButtonInterval()
+        }, 3000)
       } else {
-        this.showComponentForId = false;
+        this.showComponentForId = false
       }
       if (this.queue.length < 3) {
         this.mock()
@@ -138,28 +163,28 @@ export default {
       }
     },
     clickLikeButton() {
-      const currentItem = this.queue[0];
+      const currentItem = this.queue[0]
       if (currentItem.button === 'like') {
-        this.$refs.likeButton.click();
+        this.$refs.likeButton.click()
       }
       if (currentItem.button === 'nope') {
-        this.$refs.nopeButton.click();
+        this.$refs.nopeButton.click()
       }
       if (currentItem.button === 'super') {
-        this.$refs.superLikeButton.click();
+        this.$refs.superLikeButton.click()
       }
     },
     startLikeButtonInterval() {
       this.timer = setInterval(() => {
-        this.clickLikeButton();
-      }, 60000);
+        this.clickLikeButton()
+      }, 60000)
     },
     pauseLikeButtonInterval() {
-      clearInterval(this.timer);
+      clearInterval(this.timer)
       this.pauseTimer = setTimeout(() => {
-        this.showComponentForId = false;
-        this.startLikeButtonInterval();
-      }, 300000); // 30 minutes in milliseconds
+        this.showComponentForId = false
+        this.startLikeButtonInterval()
+      }, 300000) // 30 minutes in milliseconds
     }
   }
 }
@@ -297,7 +322,8 @@ body {
   }
 } */
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
